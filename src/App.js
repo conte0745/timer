@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import "./index.css";
+import { useEffect, useState, useRef } from "react";
+import "./App.css";
 
 const init = {
   displayTime : "10:00",
@@ -14,41 +14,54 @@ export default function App(props) {
   const [secs, setSeconds] = useState(startingSeconds);
   const [running, setRunning] = useState(false);
   const [btnDisabled, setDisabled] = useState({start: false, stop: true, reset: true})
+  const timerRef = useRef(null);
 
-  // ボタンをクリックした時の処理
+  // ボタンをクリックしたとき
   useEffect(() => {
+    console.log("useEffect");
     let timerInterval = undefined;
-    // タイマーが動いている場合
+    // タイマーが動いているとき
     if (running) {
-      timerInterval = setInterval(() => {
-        if (secs > 0) {
-          setSeconds(secs => secs - 1);
-        }
-
-        if (secs === 0) {
-          if (mins === 0) {
-            clearInterval(timerInterval);
-            setRunning(false);
-            setDisabled({start: true, stop: true, reset: false});
-          }
-          else {
-            setMinutes(mins => mins - 1);
-            setSeconds(59);
-          }
-        }
-        console.log(mins, secs);
-        let m = mins.toString().padStart(2, "0");
-        let s = secs.toString().padStart(2, "0");
-
-        setDisplayTime(`${m}:${s}`);
-      }, 1000);
+      console.log("start timer");
+      function tick() {
+        timerRef.current();
+      }
+      timerInterval = setInterval(tick, 1000);
     }
-    // クリーンアップ（タイマーをクリア）
+    // タイマーをクリア・毎回呼ばれる
     return () => {
+      console.log("clear")
       clearInterval(timerInterval);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [running, secs]);
+  }, [running]);
+
+  useEffect(() => {
+    timerRef.current = callback;
+  });
+
+  const callback = (() => {
+    console.log(mins + ":" + secs)
+    if (secs > 0) {
+      setSeconds(secs => secs - 1);
+    }
+
+    if (secs.toString() === "0") {
+      if (mins.toString() === "0") {
+        console.log("fin");
+        setRunning(false);
+        setDisabled({start: true, stop: true, reset: false});
+      }
+      else {
+        setMinutes(mins => mins - 1);
+        setSeconds(59);
+      }
+    }
+
+    let m = mins.toString().padStart(2, "0");
+    let s = secs.toString().padStart(2, "0");
+    setDisplayTime(`${m}:${s}`);
+  });
 
   // スタートボタンクリック（イベント）
   const onClickStart = () => {
@@ -67,7 +80,16 @@ export default function App(props) {
     setDisplayTime(init.displayTime);
     setMinutes(init.mins);
     setSeconds(init.secs);
-    setDisabled({start: false, stop: true, reset: true})
+    setDisabled({start: false, stop: true, reset: true});
+  };
+
+  const timerSet = (event) => {
+    if (!running){
+      setMinutes(event.target.value);
+      let m = event.target.value.toString().padStart(2, "0");
+      let s = secs.toString().padStart(2, "0");
+      setDisplayTime(`${m}:${s}`);
+    }
   };
 
   return (
@@ -78,6 +100,7 @@ export default function App(props) {
         <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn">リセット</button>
         <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn">ストップ</button>
         <button onClick={onClickStart} disabled={btnDisabled.start} className="btn">スタート</button>
+        <input type="number" value={mins} className="btn" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
       </div>
     </div>
   );
