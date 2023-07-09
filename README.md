@@ -13,3 +13,11 @@ You may also see any lint errors in the console.
 ### 使用フォント
 
 - <http://pm85122.onamae.jp/851mkpop.html>[]
+
+### バージョン
+```shell
+node -v
+v20.4.0
+npm -v 
+9.7.2
+```
