@@ -17,7 +17,9 @@ You may also see any lint errors in the console.
 ### バージョン
 ```shell
 node -v
-v20.4.0
-npm -v 
-9.7.2
 ```
+v20.4.0
+```shell
+npm -v
+```
+9.7.2
