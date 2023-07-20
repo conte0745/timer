@@ -2,13 +2,15 @@ import { useEffect, useState, useRef } from "react";
 import "./App.css";
 
 const init = {
-  displayTime : "10:00",
-  mins : 10,
+  displayTime : "05:00",
+  mins : 5,
   secs : 0
 }
+const title = "ゲーム終了まで...";
 
 export default function App(props) {
   const [displayTime, setDisplayTime] = useState(init.displayTime);
+  const [displayTitle, setDisplayTitle] = useState(title);
   const {startingMinutes = init.mins, startingSeconds = init.secs} = props
   const [mins, setMinutes] = useState(startingMinutes);
   const [secs, setSeconds] = useState(startingSeconds);
@@ -18,22 +20,28 @@ export default function App(props) {
 
   // ボタンをクリックしたとき
   useEffect(() => {
-    console.log("useEffect");
     let timerInterval = undefined;
+
     // タイマーが動いているとき
     if (running) {
-      console.log("start timer");
       function tick() {
         timerRef.current();
       }
       timerInterval = setInterval(tick, 1000);
     }
-    // タイマーをクリア・毎回呼ばれる
+
+    if (btnDisabled.start === true && 
+      btnDisabled.stop === true && 
+      btnDisabled.reset === false) {
+      setDisplayTime(`そこまで`);
+      setDisplayTitle(`　　`);
+    }
+
+    // タイマーをクリア
     return () => {
-      console.log("clear")
       clearInterval(timerInterval);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [running]);
 
   useEffect(() => {
@@ -48,19 +56,19 @@ export default function App(props) {
 
     if (secs.toString() === "0") {
       if (mins.toString() === "0") {
-        console.log("fin");
         setRunning(false);
         setDisabled({start: true, stop: true, reset: false});
+        console.log("finish");
       }
       else {
         setMinutes(mins => mins - 1);
         setSeconds(59);
       }
     }
-
     let m = mins.toString().padStart(2, "0");
     let s = secs.toString().padStart(2, "0");
     setDisplayTime(`${m}:${s}`);
+    
   });
 
   // スタートボタンクリック（イベント）
@@ -81,6 +89,7 @@ export default function App(props) {
     setMinutes(init.mins);
     setSeconds(init.secs);
     setDisabled({start: false, stop: true, reset: true});
+    setDisplayTitle(title);
   };
 
   const timerSet = (event) => {
@@ -94,13 +103,13 @@ export default function App(props) {
 
   return (
     <div className="App">
-      <h1 className="title">ゲーム終了まで...</h1>
+      <h1 className="title">{displayTitle}</h1>
       <div className="timer">{displayTime}</div>
       <div className="btnArea">
-        <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn">リセット</button>
-        <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn">ストップ</button>
-        <button onClick={onClickStart} disabled={btnDisabled.start} className="btn">スタート</button>
-        <input type="number" value={mins} className="btn" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
+        <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn_">リセット</button>
+        <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn_">ストップ</button>
+        <button onClick={onClickStart} disabled={btnDisabled.start} className="btn_">スタート</button>
+        <input type="number" value={mins} className="btn_" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
       </div>
     </div>
   );

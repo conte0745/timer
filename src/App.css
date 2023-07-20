@@ -28,7 +28,8 @@ body {
 }
 
 
-.btn {
+
+.btn_ {
   font-family: '851マカポップ';
   font-size: 10px;
   text-align: center;
@@ -38,3 +39,10 @@ body {
   width: 50px;
 }
 
+.visible {
+  visibility: visible;
+}
+
+.hidden {
+  visibility: hidden;
+}
