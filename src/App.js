@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
+import bg from './zawa_back.jpg';
 
 const init = {
   displayTime : "05:00",
@@ -9,6 +10,7 @@ const init = {
 const title = "ゲーム終了まで...";
 
 export default function App(props) {
+  const [alpha, setAlpha] = useState(1.0);
   const [displayTime, setDisplayTime] = useState(init.displayTime);
   const [displayTitle, setDisplayTitle] = useState(title);
   const {startingMinutes = init.mins, startingSeconds = init.secs} = props
@@ -65,6 +67,12 @@ export default function App(props) {
         setSeconds(59);
       }
     }
+
+    if (mins.toString() === "0") {
+      setAlpha(alpha => alpha - 2.00/600);
+      console.log(alpha);
+    }
+
     let m = mins.toString().padStart(2, "0");
     let s = secs.toString().padStart(2, "0");
     setDisplayTime(`${m}:${s}`);
@@ -102,14 +110,20 @@ export default function App(props) {
   };
 
   return (
-    <div className="App">
-      <h1 className="title">{displayTitle}</h1>
-      <div className="timer">{displayTime}</div>
-      <div className="btnArea">
-        <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn_">リセット</button>
-        <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn_">ストップ</button>
-        <button onClick={onClickStart} disabled={btnDisabled.start} className="btn_">スタート</button>
-        <input type="number" value={mins} className="btn_" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
+    <div className="App" style={{
+      backgroundImage:`url(${bg})`,
+    }}>
+      <div className="content" style={{
+        background: `rgba(0, 0, 0, ${alpha})`
+      }}>
+        <h1 className="title">{displayTitle}</h1>
+        <div className="timer">{displayTime}</div>
+        <div className="btnArea">
+          <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn_">リセット</button>
+          <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn_">ストップ</button>
+          <button onClick={onClickStart} disabled={btnDisabled.start} className="btn_">スタート</button>
+          <input type="number" value={mins} className="btn_" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
+        </div>
       </div>
     </div>
   );
