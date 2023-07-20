@@ -69,7 +69,7 @@ export default function App(props) {
     }
 
     if (mins.toString() === "0") {
-      setAlpha(alpha => alpha - 2.00/600);
+      setAlpha(alpha => alpha - 6.00/600);
       console.log(alpha);
     }
 
