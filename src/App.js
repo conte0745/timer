@@ -98,6 +98,7 @@ export default function App(props) {
     setSeconds(init.secs);
     setDisabled({start: false, stop: true, reset: true});
     setDisplayTitle(title);
+    setAlpha(1.0);
   };
 
   const timerSet = (event) => {
