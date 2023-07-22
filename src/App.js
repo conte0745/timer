@@ -5,7 +5,7 @@ import img from './zawa.png'
 const init = {
   displayTime : "05:00",
   mins : 5,
-  secs : 0
+  secs : 1
 }
 const title = "ゲーム終了まで...";
 
