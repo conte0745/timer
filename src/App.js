@@ -5,7 +5,7 @@ import img from './zawa.png'
 const init = {
   displayTime : "05:00",
   mins : 5,
-  secs : 30
+  secs : 0
 }
 const title = "ゲーム終了まで...";
 
@@ -86,7 +86,6 @@ export default function App(props) {
     let m = mins.toString().padStart(2, "0");
     let s = secs.toString().padStart(2, "0");
     setDisplayTime(`${m}:${s}`);
-    
   });
 
   // スタートボタンクリック（イベント）
