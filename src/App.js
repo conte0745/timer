@@ -1,16 +1,15 @@
 import { useEffect, useState, useRef } from "react";
 import "./App.css";
-import bg from './zawa_back.jpg';
+import img from './zawa.png'
 
 const init = {
   displayTime : "05:00",
   mins : 5,
-  secs : 0
+  secs : 30
 }
 const title = "ゲーム終了まで...";
 
 export default function App(props) {
-  const [alpha, setAlpha] = useState(1.0);
   const [displayTime, setDisplayTime] = useState(init.displayTime);
   const [displayTitle, setDisplayTitle] = useState(title);
   const {startingMinutes = init.mins, startingSeconds = init.secs} = props
@@ -37,6 +36,7 @@ export default function App(props) {
       btnDisabled.reset === false) {
       setDisplayTime(`そこまで`);
       setDisplayTitle(`　　`);
+
     }
 
     // タイマーをクリア
@@ -51,7 +51,6 @@ export default function App(props) {
   });
 
   const callback = (() => {
-    console.log(mins + ":" + secs)
     if (secs > 0) {
       setSeconds(secs => secs - 1);
     }
@@ -69,8 +68,19 @@ export default function App(props) {
     }
 
     if (mins.toString() === "0") {
-      setAlpha(alpha => alpha - 6.00/600);
-      console.log(alpha);
+      if (secs <  10) {
+        setImage(20000);
+        setImage(30000);
+        setImage(40000);
+      }
+      else if (secs < 5) {
+        setImage(20000);
+        setImage(30000);
+        setImage(50000);
+        setImage(60000);
+        setImage(70000);
+      }
+      setImage(10000);
     }
 
     let m = mins.toString().padStart(2, "0");
@@ -98,7 +108,6 @@ export default function App(props) {
     setSeconds(init.secs);
     setDisabled({start: false, stop: true, reset: true});
     setDisplayTitle(title);
-    setAlpha(1.0);
   };
 
   const timerSet = (event) => {
@@ -110,15 +119,38 @@ export default function App(props) {
     }
   };
 
+  function getRandomPlace() {
+    const width = (Math.floor(Math.random() * window.innerWidth) - 100) + "px";
+    const height = Math.floor(Math.random() * window.innerHeight) + "px";
+    const scale = Math.random() * 1.3;
+    return {"width" : width, "height" : height, "scale" : scale};
+  }
+
+  function setImage(t){
+    let body = document.getElementById("body");
+    let division = document.createElement("div");
+    let image = document.createElement("img");
+    let position = getRandomPlace();
+    image.src = img;
+    division.appendChild(image);
+    division.style.padding = "1px";
+    division.style.position = "absolute";
+    division.style.top = position.height;
+    division.style.left = position.width;
+    division.style.zIndex = -1;
+    division.style.transform = `scale(${position.scale, position.scale})`;
+    body.appendChild(division);
+    const anime = division.animate(
+      {opacity : [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.55, 0.5, 0.4, 0.3, 0.2, 0.1, 0]},
+      {duration : Number(t)}
+    )
+    anime.onfinish = () => {division.remove();};
+  }
+
   return (
-    <div className="App" style={{
-      backgroundImage:`url(${bg})`,
-    }}>
-      <div className="content" style={{
-        background: `rgba(0, 0, 0, ${alpha})`
-      }}>
+    <div className="App">
         <h1 className="title">{displayTitle}</h1>
-        <div className="timer">{displayTime}</div>
+        <div className="timer" id="timer">{displayTime}</div>
         <div className="btnArea">
           <button onClick={onClickReset} disabled={btnDisabled.reset} className="btn_">リセット</button>
           <button onClick={onClickStop} disabled={btnDisabled.stop} className="btn_">ストップ</button>
@@ -126,6 +158,6 @@ export default function App(props) {
           <input type="number" value={mins} className="btn_" onChange={timerSet} min={0} max={59} disabled={btnDisabled.start}></input>
         </div>
       </div>
-    </div>
+    
   );
 }; 

@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/timer/static/css/main.35209bf5.css",
-    "main.js": "/timer/static/js/main.9aa37a99.js",
+    "main.css": "/timer/static/css/main.87c1cf3a.css",
+    "main.js": "/timer/static/js/main.2c911e83.js",
     "static/js/787.b701888c.chunk.js": "/timer/static/js/787.b701888c.chunk.js",
     "static/media/851MkPOP_101.ttf": "/timer/static/media/851MkPOP_101.d2dbd29e463bd7be14eb.ttf",
-    "static/media/zawa_back.jpg": "/timer/static/media/zawa_back.e0b67c9615515fdd1acc.jpg",
+    "static/media/zawa.png": "/timer/static/media/zawa.2d03dce124498b2a0aeb.png",
     "index.html": "/timer/index.html",
-    "main.35209bf5.css.map": "/timer/static/css/main.35209bf5.css.map",
-    "main.9aa37a99.js.map": "/timer/static/js/main.9aa37a99.js.map",
+    "main.87c1cf3a.css.map": "/timer/static/css/main.87c1cf3a.css.map",
+    "main.2c911e83.js.map": "/timer/static/js/main.2c911e83.js.map",
     "787.b701888c.chunk.js.map": "/timer/static/js/787.b701888c.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.35209bf5.css",
-    "static/js/main.9aa37a99.js"
+    "static/css/main.87c1cf3a.css",
+    "static/js/main.2c911e83.js"
   ]
 }
