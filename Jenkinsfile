@@ -28,7 +28,7 @@ pipeline {
             steps {
                 echo 'Testing'
                 script {
-                    def url = 'https://stg-env23438597-jenkins.s3.ap-northeast-1.amazonaws.com/testa.html'
+                    def url = 'https://stg-env23438597-jenkins.s3.ap-northeast-1.amazonaws.com/test.html'
                     def response = sh(script: "curl -s -o /dev/null -w '%{http_code}' '$url'", returnStdout: true)
 
                     if (response == '200') {
@@ -43,6 +43,13 @@ pipeline {
         stage('Release') {
             steps {
                 echo 'Releasing'
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'AWS S3 Access',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                        sh(script: 'aws s3 cp /var/lib/jenkins/workspace/PipeLineTest/docs/. s3://stg-env23438597-jenkins/doc/')')
+                }
             }
         }
     }
